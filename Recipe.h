@@ -22,12 +22,13 @@ void printPrice(std::vector<std::string> user_menu = {{"none"}}) {
 			user_menu.push_back(pair.first);
 		}
 	}
-	std::cout << "가격표:  "; 
+	std::cout << "[INFO] 가격표: "; 
 	for (const std::string& menu : user_menu) {
 		// 여기에 바로 출력문이 있었고 함수 종료됐으나, 없는 메뉴 입력시 코어덤프 생기는 관계로 대충 디버그함.
 		for (const auto& p : RECIPE) {
 			if (p.first == menu) std::cout << menu << ": " << RECIPE.at(menu)[3] << "원   ";
 		}
 	}
+	puts("");
 }
 

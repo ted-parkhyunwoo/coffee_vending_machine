@@ -60,7 +60,7 @@ public:
 			total_incomed += pair.first * pair.second;
 			std::cout << pair.first << "원: " << pair.second <<"개   ";
 		}
-		std::cout << std::endl;
+		std::cout << "			";
 		std::cout << "총 " << total_incomed << "원이 반환되었습니다." << std::endl;
 		income_total -= total_incomed;
 	}

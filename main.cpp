@@ -28,7 +28,7 @@ int main() {
 
 
 	//초기화.
-	MachineController manager(5, 150);
+	MachineController manager(5, 550);
 
 	// 재료별 주문가능 메뉴 출력.
 	// manager.printValidMaterialMenu();
@@ -40,7 +40,7 @@ int main() {
 
 
 	while (1) {
-		std::cout << "Run (1:sales  2:report  3:add Material  4:add Coins  0:turnOff) : ";
+		std::cout << "[START] 1:sales  2:report  3:add Material  4:add Coins  0:turnOff\nRUN : ";
 		int mode_switch;
 		std::cin >> mode_switch;
 		puts("");
@@ -55,10 +55,12 @@ int main() {
 			std::cout << "[REPORT MODE]" << std::endl;
 			manager.report_material();
 			manager.report_cash();
+			manager.report_sales();
 			puts("");
 			break;
 		case 3:
 			std::cout << "[ADD MATERIALS]" << std::endl;
+			std::cout << "[INFO] 커피, 물, 우유 순으로 띄어쓰기 구분합니다. 음수 사용 가능합니다." << std::endl;
 			std::cout << "coffee, water, milk: ";
 			int cf, wt, mk;
 			std::cin >> cf >> wt >> mk;
@@ -68,6 +70,8 @@ int main() {
 			break;
 		case 4:
 			std::cout << "[ADD COINS]" << std::endl;
+			std::cout << "[WARNING] 지폐 혹은 실제로 없는 단위 화폐를 추가 하여도, 머신은 유효한 동전 외 반환하지 않습니다." << std::endl;
+			std::cout << "[INFO] 단위 갯수 (예 : 500 10) 처럼 띄어쓰기 구분합니다. 음수 사용 가능합니다." << std::endl;
 			int coin_price, coin_amount;
 			std::cout << "price, amount: ";
 			std::cin >> coin_price >> coin_amount;

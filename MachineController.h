@@ -16,12 +16,34 @@ class MachineController : public CashManager, public MaterialManager {
 private:	
 	const std::vector<int> VALID_COINS = {10, 50, 100, 500};		//1000원 지폐 있었으나, 기능 삭제.
 	std::vector<std::string> possible_order = validMaterialMenu();		//초기화는 재료 유효성검사된 벡터.(validMaterialMenu)
-
+	std::map<std::string, int> sales_record;						//판매기록.
 
 public:
 	// 기본생성자에서 바로 기본클래스로 넘김.
 	MachineController(): CashManager(), MaterialManager() {}
 	MachineController(int first_run_amount, int amount): CashManager(first_run_amount), MaterialManager(amount) {}
+
+	// Update possible_order
+	void updatePossible_order() {
+		possible_order = validMaterialMenu();
+	}
+
+	// Print sales record
+	void report_sales() {
+		std::cout << "Sales Report: ";
+		if (sales_record.empty()) {
+			std::cout << "[없음]";
+		}
+		else {
+			std::cout << "[";
+			for (const auto& pair : sales_record) {
+				std::cout << pair.first << ": " << pair.second << "잔 ";
+			}
+			std::cout << "]";
+		}
+		std::cout << std::endl;
+	}
+
 
 	// 단순 메뉴 가격 리턴.	menu_name 는 RECIPE.h의 key를 따름.
 	int priceCoffee (std::string menu_name) {
@@ -39,13 +61,15 @@ public:
         useMaterials(coffee, water, milk);
         // 출력문
         std::cout <<"[주문완료] " << menu_name << " 커피가 완성되었습니다." << std::endl;
+        // update sales_record
+        sales_record[menu_name]++;
     }
 
     // 주문목록 vector에 입력한 string이 포함됐는지. 포함되면 string return. 
     std::string getValidOrder(std::vector<std::string> menu) {
     	while (true) {
     		std::string order;
-    		std::cout << "Order: ";
+    		std::cout << "[INPUT:STRING] Order: ";
     		std::cin >> order;
     		if (find(menu.begin(), menu.end(), order) == menu.end()) {
     			std::cout << "잘못된 주문입니다." << std::endl;
@@ -62,19 +86,22 @@ public:
 		std::map<int, int> currentInsertedCoins;					//현재 투입된 화폐:갯수 맵. - 아래 while문에서 업데이트.
 
 		std::vector<std::string> order_valid_menues;		// 주문 가능 메뉴.
-			
+		
+
 		// 재료별 주문가능 메뉴 출력. false 로 재료부족은 출력 안함.
+		updatePossible_order();		// 시작 전 관리자 재료 추가를 대비해 possible_order 업데이트.
 		std::cout << "주문가능: ";
 		printValidMaterialMenu();
 		std::cout << "재료부족: ";
 		printValidMaterialMenu(false);
 
 		// 동전 투입 반복문.
-		std::cout << "[정보] 화폐는 10, 50, 100, 500원만 가능합니다." << std::endl
-		<< "[입력정보] 0 입력시 주문 시작, -1 입력시 취소됩니다. -2: sales mode 종료." << std::endl;
+		std::cout << "[INFO] 화폐는 10, 50, 100, 500원만 가능합니다." << std::endl
+		<< "[INFO] 0 입력시 주문 시작, -1 입력시 취소됩니다. -2 : 나가기" << std::endl;
 		while (1) {
+
 			std::vector<std::string> tmp_possible_menu = possible_order;	//재료에 따른 가능한 메뉴 초기화.
-			std::cout << "현재 금액 : " << totalInsert << ",   ";
+			std::cout << "[STATUS] 현재 금액 : " << totalInsert << ",   ";
 			int inserted; 
 			// 디버그!!!!!!!!!!!!!!!!!!!!!!!!!! input으로 관리하고, report 등 명령 실행할 수 있도록 할 것.
 			// !!!!!!!!!!!!!! 디버그 진행하며 로직 함수화 고려할 것.
@@ -92,7 +119,7 @@ public:
 		        continue;
     		}
 
-			//!!!!!!!!!!!!!!!!!!! debug용 루프종료
+			// 루프종료
 			if (inserted == -2) break;
 			
 			if (inserted != 0 && inserted != -1) { 		// 동전투입 반복 조건문.
@@ -118,7 +145,7 @@ public:
 					
 					// 가능메뉴 표기.(직접 프린트됨.)
 					if (!tmp_valid_price_menu.empty()) {
-						std::cout << "구입가능: ";
+						std::cout << "[UPDATE] 구입가능: ";
 						printMenu(tmp_valid_price_menu);
 						}						
 					order_valid_menues = tmp_valid_price_menu;			// last_updated_valid_menues에 가능메뉴 갱신.
