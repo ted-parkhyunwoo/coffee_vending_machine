@@ -26,7 +26,6 @@ void startLoop(MachineController& source) {
 
 int main() {
 
-
 	//초기화.
 	MachineController manager(5, 550);
 

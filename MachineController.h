@@ -48,15 +48,15 @@ public:
 	// 단순 메뉴 가격 리턴.	menu_name 는 RECIPE.h의 key를 따름.
 	int priceCoffee (std::string menu_name) {
 		int price;
-		price = RECIPE.at(menu_name)[3];
+		price = getRecipeInfo(menu_name, getPrice);
 		return price;
 	}
 
 	// 커피 제작. (레시피대로 재료차감, + 출력문.)
     void makeCoffee(std::string menu_name) {
-        int coffee = RECIPE.at(menu_name)[0];
-        int water = RECIPE.at(menu_name)[1];
-        int milk = RECIPE.at(menu_name)[2];
+        int coffee = getRecipeInfo(menu_name, getCoffee);
+        int water = getRecipeInfo(menu_name, getWater);
+        int milk = getRecipeInfo(menu_name, getMilk);
         // 재료 차감.
         useMaterials(coffee, water, milk);
         // 출력문
@@ -183,7 +183,7 @@ public:
 				makeCoffee(your_choice);
 
 				// 주문한 your_choice 대비 거스름돈 반환.
-				int your_change = totalInsert - RECIPE.at(your_choice)[3];
+				int your_change = totalInsert - getRecipeInfo(your_choice, getPrice);
 				if (your_change) makeChange(your_change, true);		//your_change 가 0일땐 거스름돈 진행하지 않도록 됨.
 
 				// possible_order 초기화.
@@ -214,6 +214,5 @@ public:
 		auto menu = validMaterialMenu(possOrImposs);
 		printMenu(menu);
 	}
-
 };
 
