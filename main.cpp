@@ -1,15 +1,13 @@
 #include <iostream>
 #include "MachineController.h"
 
-//TODO. Run 에 status 를 찍고 report를 대체할 것. (report도 함께 출력.)
-// 몇잔 팔았는지 map 찍을 것.
-// showEmptyCoins(0) 처럼 재료도 만들 것.
-
 
 void startLoop(MachineController& source) {
 	
 	// 가격표 메서드
 	printPrice();
+
+	// 가격표 메뉴 직접 지정시:
 	// printPrice({{"espresso"}, {"americano"}});
 
 	// 동전 삽입 루프
@@ -34,9 +32,9 @@ int main() {
 
 	// 불가능 메뉴 
 	// manager.printMenu(false);
+
 	// 부족한 동전 출력 (환경변수는 그 갯수 이하 동전 출력)
 	// manager.showEmptyCoins(2);
-
 
 	while (1) {
 		std::cout << "[START] 1:sales  2:report  3:add Material  4:add Coins  0:turnOff\nRUN : ";

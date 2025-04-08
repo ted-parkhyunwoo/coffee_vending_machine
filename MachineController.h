@@ -9,13 +9,13 @@
 #include <limits>
 #include "Recipe.h"
 
-// 동전관리, 재료관리, 레시피관리, (앞으로 추가할 커피머신) 등을 통합관리하는 메니저.
-
+// 동전관리, 재료관리, 레시피관리, (앞으로 추가할 커피머신) 등을 통합관리하는 매니저.
 class MachineController : public CashManager, public MaterialManager {
 
 private:	
 	const std::vector<int> VALID_COINS = {10, 50, 100, 500};		//1000원 지폐 있었으나, 기능 삭제.
-	std::vector<std::string> possible_order = validMaterialMenu();		//초기화는 재료 유효성검사된 벡터.(validMaterialMenu)
+	//! 화폐 추가시 CashManager.h 에서 전체적인 로직수정이 필요함.
+	std::vector<std::string> possible_order = validMaterialMenu();		//초기화는 재료 유효성검사된 벡터
 	std::map<std::string, int> sales_record;						//판매기록.
 
 public:
@@ -48,15 +48,15 @@ public:
 	// 단순 메뉴 가격 리턴.	menu_name 는 RECIPE.h의 key를 따름.
 	int priceCoffee (std::string menu_name) {
 		int price;
-		price = getRecipeInfo(menu_name, getPrice);
+		price = getRecipeInfo(menu_name, mName::price);
 		return price;
 	}
 
 	// 커피 제작. (레시피대로 재료차감, + 출력문.)
     void makeCoffee(std::string menu_name) {
-        int coffee = getRecipeInfo(menu_name, getCoffee);
-        int water = getRecipeInfo(menu_name, getWater);
-        int milk = getRecipeInfo(menu_name, getMilk);
+        int coffee = getRecipeInfo(menu_name, mName::coffee);
+        int water = getRecipeInfo(menu_name, mName::water);
+        int milk = getRecipeInfo(menu_name, mName::milk);
         // 재료 차감.
         useMaterials(coffee, water, milk);
         // 출력문
@@ -78,7 +78,6 @@ public:
     }
 
 	// 금액투입 함수 구현.
-	// !!!!!!!!!!!!!!!!!!!!!!!!!!!사실상 현재 메인함수임. 금액투입 등등은 함수화 해서 관리하여 가독성을 높일 필요가 있음.
 	// CashManager 에서 구현하기에는 재료관리, 커피머신, 현금관리에 어려움이 있어서 통합함.
 	void startInsert() {
 
@@ -103,12 +102,6 @@ public:
 			std::vector<std::string> tmp_possible_menu = possible_order;	//재료에 따른 가능한 메뉴 초기화.
 			std::cout << "[STATUS] 현재 금액 : " << totalInsert << ",   ";
 			int inserted; 
-			// 디버그!!!!!!!!!!!!!!!!!!!!!!!!!! input으로 관리하고, report 등 명령 실행할 수 있도록 할 것.
-			// !!!!!!!!!!!!!! 디버그 진행하며 로직 함수화 고려할 것.
-			// 취소, 주문도 바로 진행하도록 연결. (0, -1입력 말고.)	
-			// 안그러면 실수로 Insert에 문자열 입력시 무한루프 버그걸림.
-			// input이 정수이며, VALID_COINS 에 포함 될 때만 inserted에 넣고 아래 진행 하도록 수정할 것.
-
 
 			// 정수 이외 입력처리 불가 세팅.
 			std::cout << "Insert: ";
@@ -183,7 +176,7 @@ public:
 				makeCoffee(your_choice);
 
 				// 주문한 your_choice 대비 거스름돈 반환.
-				int your_change = totalInsert - getRecipeInfo(your_choice, getPrice);
+				int your_change = totalInsert - getRecipeInfo(your_choice, mName::price);
 				if (your_change) makeChange(your_change, true);		//your_change 가 0일땐 거스름돈 진행하지 않도록 됨.
 
 				// possible_order 초기화.

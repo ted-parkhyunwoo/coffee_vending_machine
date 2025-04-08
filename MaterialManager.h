@@ -53,16 +53,16 @@ public:
 		bool result = true;
 		std::vector<std::string> notEnoughMaterials;
 		// check
-		if (getRecipeInfo(menu_name, getCoffee) > coffee) {
-			notEnoughMaterials.push_back("Coffee:" + std::to_string(getRecipeInfo(menu_name, getCoffee) - coffee) + "g");
+		if (getRecipeInfo(menu_name, mName::coffee) > coffee) {
+			notEnoughMaterials.push_back("Coffee:" + std::to_string(getRecipeInfo(menu_name, mName::coffee) - coffee) + "g");
 			result = false;
 		}
-		if (getRecipeInfo(menu_name, getWater) > water) {
-			notEnoughMaterials.push_back("Water:" + std::to_string(getRecipeInfo(menu_name, getWater) - water) + "ml");
+		if (getRecipeInfo(menu_name, mName::water) > water) {
+			notEnoughMaterials.push_back("Water:" + std::to_string(getRecipeInfo(menu_name, mName::water) - water) + "ml");
 			result = false;
 		}
-		if (getRecipeInfo(menu_name, getMilk) > milk) {
-			notEnoughMaterials.push_back("Milk:" + std::to_string(getRecipeInfo(menu_name, getMilk) - milk) + "ml");
+		if (getRecipeInfo(menu_name, mName::milk) > milk) {
+			notEnoughMaterials.push_back("Milk:" + std::to_string(getRecipeInfo(menu_name, mName::milk) - milk) + "ml");
 			result = false;
 		}
 
@@ -83,9 +83,9 @@ public:
 		std::vector<std::string> result;
 		std::vector<std::string> possibleMenu;	//제작가능	
 		std::vector<std::string> impossibleMenu;	//불가능
-		for (const auto& menu : RECIPE) {
-			if (isEnough(menu.first, true)) possibleMenu.push_back(menu.first);
-			else impossibleMenu.push_back(menu.first);
+		for (const auto& menu : MENUS) {
+			if (isEnough(menu.getName(), true)) possibleMenu.push_back(menu.getName());
+			else impossibleMenu.push_back(menu.getName());
 		}
 
 		if (isEnoughMaterial) result = possibleMenu;
