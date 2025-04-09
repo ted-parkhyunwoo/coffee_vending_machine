@@ -13,13 +13,13 @@
 class MachineController : public CashManager, public MaterialManager {
 
 private:	
-	const std::vector<int> VALID_COINS = {10, 50, 100, 500};		//1000원 지폐 있었으나, 기능 삭제.
 	//! 화폐 추가시 CashManager.h 에서 전체적인 로직수정이 필요함.
+	const std::vector<int> VALID_COINS = {10, 50, 100, 500};			//1000원 지폐 있었으나, 기능 삭제.
 	std::vector<std::string> possible_order = validMaterialMenu();		//초기화는 재료 유효성검사된 벡터
-	std::map<std::string, int> sales_record;						//판매기록.
+	std::map<std::string, int> sales_record;							//판매기록.
 
 public:
-	// 기본생성자에서 바로 기본클래스로 넘김.
+	// 기본생성자에서 바로 기본클래스(Base class: 상속받은 두 클래스)로 넘김.
 	MachineController(): CashManager(), MaterialManager() {}
 	MachineController(int first_run_amount, int amount): CashManager(first_run_amount), MaterialManager(amount) {}
 
@@ -44,19 +44,18 @@ public:
 		std::cout << std::endl;
 	}
 
-
 	// 단순 메뉴 가격 리턴.	menu_name 는 RECIPE.h의 key를 따름.
 	int priceCoffee (std::string menu_name) {
 		int price;
-		price = getRecipeInfo(menu_name, mName::price);
+		price = getRecipeInfo(menu_name, Material::price);
 		return price;
 	}
 
 	// 커피 제작. (레시피대로 재료차감, + 출력문.)
     void makeCoffee(std::string menu_name) {
-        int coffee = getRecipeInfo(menu_name, mName::coffee);
-        int water = getRecipeInfo(menu_name, mName::water);
-        int milk = getRecipeInfo(menu_name, mName::milk);
+        int coffee = getRecipeInfo(menu_name, Material::coffee);
+        int water = getRecipeInfo(menu_name, Material::water);
+        int milk = getRecipeInfo(menu_name, Material::milk);
         // 재료 차감.
         useMaterials(coffee, water, milk);
         // 출력문
@@ -95,8 +94,7 @@ public:
 		printValidMaterialMenu(false);
 
 		// 동전 투입 반복문.
-		std::cout << "[INFO] 화폐는 10, 50, 100, 500원만 가능합니다." << std::endl
-		<< "[INFO] 0 입력시 주문 시작, -1 입력시 취소됩니다. -2 : 나가기" << std::endl;
+		std::cout << "[INFO] 화폐는 10, 50, 100, 500원만 가능합니다. 0 입력시 주문 시작, -1 입력시 취소됩니다. -2 : 나가기" << std::endl;
 		while (1) {
 
 			std::vector<std::string> tmp_possible_menu = possible_order;	//재료에 따른 가능한 메뉴 초기화.
@@ -154,7 +152,6 @@ public:
 				return;
 			}
 
-
 			// 가능하면 //makeOrder 함수로 만들 것.
 			else if (inserted == 0) {									// 동전삽입 완료시
 				if (totalInsert == 0) {									// 입력된 돈 0이면 다시 재진입.
@@ -170,13 +167,12 @@ public:
 				// 가격표 조회.
 				printPrice(order_valid_menues);
 
-
 				// 검증된 메뉴 선택만 가능하도록 getValidOrder 함수 사용.
 				std::string your_choice = getValidOrder(order_valid_menues);
 				makeCoffee(your_choice);
 
 				// 주문한 your_choice 대비 거스름돈 반환.
-				int your_change = totalInsert - getRecipeInfo(your_choice, mName::price);
+				int your_change = totalInsert - getRecipeInfo(your_choice, Material::price);
 				if (your_change) makeChange(your_change, true);		//your_change 가 0일땐 거스름돈 진행하지 않도록 됨.
 
 				// possible_order 초기화.

@@ -19,13 +19,11 @@ public:
 
 	// 그냥 재료를 차감하는 함수.
 	void useMaterials(int coffee = 0, int water = 0, int milk = 0) {
-
 		// 재료부족시 경고 후 리턴.
 		if (coffee > this->coffee || water > this->water || milk > this->milk) {
 			std::cout << "[ERROR] Not Enough Materials.";
 			return;
 		}
-
 		this->coffee -= coffee;
 		this->water -= water;
 		this->milk -= milk;
@@ -53,16 +51,16 @@ public:
 		bool result = true;
 		std::vector<std::string> notEnoughMaterials;
 		// check
-		if (getRecipeInfo(menu_name, mName::coffee) > coffee) {
-			notEnoughMaterials.push_back("Coffee:" + std::to_string(getRecipeInfo(menu_name, mName::coffee) - coffee) + "g");
+		if (getRecipeInfo(menu_name, Material::coffee) > coffee) {
+			notEnoughMaterials.push_back("Coffee:" + std::to_string(getRecipeInfo(menu_name, Material::coffee) - coffee) + "g");
 			result = false;
 		}
-		if (getRecipeInfo(menu_name, mName::water) > water) {
-			notEnoughMaterials.push_back("Water:" + std::to_string(getRecipeInfo(menu_name, mName::water) - water) + "ml");
+		if (getRecipeInfo(menu_name, Material::water) > water) {
+			notEnoughMaterials.push_back("Water:" + std::to_string(getRecipeInfo(menu_name, Material::water) - water) + "ml");
 			result = false;
 		}
-		if (getRecipeInfo(menu_name, mName::milk) > milk) {
-			notEnoughMaterials.push_back("Milk:" + std::to_string(getRecipeInfo(menu_name, mName::milk) - milk) + "ml");
+		if (getRecipeInfo(menu_name, Material::milk) > milk) {
+			notEnoughMaterials.push_back("Milk:" + std::to_string(getRecipeInfo(menu_name, Material::milk) - milk) + "ml");
 			result = false;
 		}
 
@@ -87,11 +85,9 @@ public:
 			if (isEnough(menu.getName(), true)) possibleMenu.push_back(menu.getName());
 			else impossibleMenu.push_back(menu.getName());
 		}
-
-		if (isEnoughMaterial) result = possibleMenu;
-		else if (!isEnoughMaterial) result = impossibleMenu;
-
-		return result;
+		// isEnoughMaterial 이 true면 제작가능한 메뉴, false면 불가능한 메뉴 리턴.
+		if (isEnoughMaterial) return possibleMenu;
+		else return impossibleMenu;
 	}
 
 };

@@ -1,10 +1,9 @@
 #include <iostream>
 #include "MachineController.h"
 
-
 void startLoop(MachineController& source) {
 	
-	// 가격표 메서드
+	// 가격표 출력 메서드
 	printPrice();
 
 	// 가격표 메뉴 직접 지정시:
@@ -17,7 +16,6 @@ void startLoop(MachineController& source) {
 		std::cout << "[FINISH] New order? (y or n): ";
 		std::cin >> user_input;
 		if (user_input == 'y') continue;
-		else if (user_input == 'n') break;
 		else break;
 	}
 };
@@ -76,7 +74,6 @@ int main() {
 			manager.report_cash();
 			puts("");
 			break;
-
 		case 0:
 			return 0;
 		default:

@@ -3,29 +3,29 @@
 #include <map>
 #include <vector>
 #include <iostream>
+#include <array>
 
-enum class mName { coffee, water, milk, price} ;
+enum class Material { coffee, water, milk, price } ;
 
 class Recipe {
+
 protected:
+
 	std::string name;
-	int info[4];
+	std::array<int, 4> info; // coffee, water, milk, price
 
 public:
-	Recipe(const std::string& name, int coffee, int water, int milk, int price) {
-		this->name = name;
-		info[static_cast<int>(mName::coffee)] = coffee;
-		info[static_cast<int>(mName::water)] = water;
-		info[static_cast<int>(mName::milk)] = milk;
-		info[static_cast<int>(mName::price)] = price;
+
+	Recipe(const std::string& name, int coffee, int water, int milk, int price) : name(name) {
+		info = { coffee, water, milk, price };
 	}
 
-	const std::string& getName() const {
+	const std::string& getName() const {	// return menu name.
 		return name;
 	}
 	
-	const int& getInfo(mName material) const {
-		return info[static_cast<int>(material)];
+	const int& getInfo(Material material) const {		// return material info.
+		return info[int(material)];
 	}
 };
 
@@ -41,7 +41,7 @@ const Recipe MENUS[] = {
 
 
 // 메뉴 이름으로 재료정보를 가져오는 함수.
-const int& getRecipeInfo(const std::string& menu, mName material) {
+const int& getRecipeInfo(const std::string& menu, Material material) {
 	for (auto& recipe : MENUS) {
 		if (recipe.getName() == menu) {
 			return recipe.getInfo(material);
@@ -59,10 +59,9 @@ void printPrice(std::vector<std::string> user_menu = {}) {
             user_menu.push_back(recipe.getName());
         }
     }
-
     std::cout << "[INFO] 가격표: ";
     for (const std::string& menu : user_menu) {
-        std::cout << menu << ": " << getRecipeInfo(menu, mName::price) << "원   ";
+        std::cout << menu << ": " << getRecipeInfo(menu, Material::price) << "원   ";
     }
     std::cout << std::endl;
 }
